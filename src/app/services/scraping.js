@@ -1,9 +1,8 @@
 const cheerio = require("cheerio");
 const axios = require("axios");
 
-exports.scrape = async function (){
-    //async function  {
-    const html = await axios.get('https://spacetoday.com.br/category/cosmologia/');
+exports.scrape = async function (page){
+    const html = await axios.get('https://spacetoday.com.br/author/admin/'+page+'/');
     const $ = await cheerio.load(html.data);
     let data = [];
 
@@ -17,10 +16,5 @@ exports.scrape = async function (){
         });
 
     });
-    console.log(data);
     return data;
 }
-
-// run();
-
-//pagination=>> https://spacetoday.com.br/category/cosmologia/page/2/
