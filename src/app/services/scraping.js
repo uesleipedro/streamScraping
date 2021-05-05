@@ -2,7 +2,9 @@ const cheerio = require("cheerio");
 const axios = require("axios");
 
 exports.scrape = async function (page){
-    const html = await axios.get('https://spacetoday.com.br/author/admin/'+page+'/');
+    var page = page == 1 ? '' : 'page/'+page+'/';
+   
+    const html = await axios.get('https://spacetoday.com.br/author/admin/'+page);
     const $ = await cheerio.load(html.data);
     let data = [];
 
