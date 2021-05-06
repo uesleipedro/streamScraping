@@ -14,7 +14,8 @@ exports.scrape = async function (page){
             id: $(elem).find('div.entry-image a').attr('data-id'),
             title: $(elem).find('div.entry-image a').attr('title'),
             link: $(elem).find('div.entry-image > a').attr('href'),
-            image: $(elem).find('div.entry-image > a > img').attr('src')
+            image: $(elem).find('div.entry-image > a > img').attr('src'),
+            time: $(elem).find('div.entry-header > div.entry-meta > div.meta-item > span.meta-icon').text()
         });
 
     });
