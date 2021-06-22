@@ -12,4 +12,13 @@ app.get('/articles/:page', async (req, res, next) => {
     runAsync();
 });
 
+app.get('/externalArticles/:page', async (req, res, next) => {
+    async function runAsync() {
+        const page = req.params.page;
+        var data = await scraping.newsnow(page);
+        return res.status(200).send({ data });
+    }
+    runAsync();
+});
+
 module.exports = app;
