@@ -24,7 +24,7 @@ exports.scrape = async function (page) {
 
 exports.newsnow = async function (page) {
     var lastItem = (page * 10) - 1;
-    var firstItem = lastItem - 10;
+    var firstItem = lastItem - 9;
 
     const html = await axios.get('https://www.newsnow.com/us/Science/Astronomy?type=ln');
     const $ = await cheerio.load(html.data);
@@ -36,8 +36,6 @@ exports.newsnow = async function (page) {
                 id: $(elem).attr('data-id'),
                 title: $(elem).find('a').text(),
                 link: $(elem).find('a').attr('href'),
-                // image: $(elem).find('div.entry-image > a > img').attr('src'),
-                // time: $(elem).find('div.entry-header > div.entry-meta > div.meta-item > span.meta-icon').text()
                 counter: i
             });
         }
