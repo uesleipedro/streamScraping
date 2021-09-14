@@ -16,6 +16,7 @@ exports.scrape = async function (page) {
             link: $(elem).find('div.entry-image > a').attr('href'),
             image: $(elem).find('div.entry-image > a > img').attr('src'),
             time: $(elem).find('div.entry-header > div.entry-meta > div.meta-item > span.meta-icon').text()
+            // description: $(elem).find('div.entry-content > p').text()
         });
 
     });
@@ -39,7 +40,34 @@ exports.newsnow = async function (page) {
                 counter: i
             });
         }
-        if ( i >= lastItem) return false;
+        if (i >= lastItem) return false;
+
+    });
+    return data;
+}
+
+exports.post = async function (page) {
+
+    const html = await axios.get(`https://spacetoday.com.br/${page}`);
+    const $ = await cheerio.load(html.data);
+    let data = [];
+
+    $('div.vlog-site-content > article.post').each((i, elem) => {
+        var link = $(this);
+        data.push({
+            title: $(elem).find('h1.entry-title').text(),
+            article: $(elem).find('div.entry-content-single > p').map(function () {
+                return $(this).text();
+            }).get(),
+            image: $(elem).find('div.entry-content-single > p > img').map(function () {
+                return $(this).attr('src');
+            }).get(),
+            tags: $(elem).find('div.entry-content-single > div.meta-tags > a').map(function () {
+                return $(this).text();
+            }).get(),
+            video: $(elem)
+                .find('div.entry-content-single div.tube-video-wrap div.tube-vc-embed div.fluid-width-video-wrapper').attr('class')
+        });
 
     });
     return data;
