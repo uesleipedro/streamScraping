@@ -1,60 +1,32 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
 
-const scraping = require('./app/services/scraping');
+const scraping = require('./app/controller/scraping');
+const VideoController = require("./app/controller/VideoController");
 
-app.get('/', function (req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
-    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-    res.send('It\'s working');
-});
-
-app.get('/articles/:page', async (req, res, next) => {
-
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
-    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
-
-    async function runAsync() {
-        const page = req.params.page;
-        var data = await scraping.scrape(page);
-        return res.status(200).send({ data });
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*') 
+    res.header(
+        'Access-Control-Allow-Header',
+        'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    );
+    if (req.method === 'OPTIONS') {
+        res.header('Access-Control-Allow-Methos', 'PUT, POST, PATCH, DELETE, GET');
+        return res.status(200).send({});
     }
-    runAsync();
+
+    next();
 });
 
-app.get('/externalArticles/:page', async (req, res, next) => {
-
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
-    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
-
-    async function runAsync() {
-        const page = req.params.page;
-        var data = await scraping.newsnow(page);
-        return res.status(200).send({ data });
-    }
-    runAsync();
-});
-
-app.get('/post/:page', async (req, res, next) => {
-
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
-    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
-
-    async function runAsync() {
-        const page = req.params.page;
-        var data = await scraping.post(page);
-        return res.status(200).send({ data });
-    }
-    runAsync();
-});
+app.use('/articles/:page', scraping.scrape);
+app.use('/externalArticles/:page', scraping.newsnow);
+app.use('/post/:page', scraping.post);
+app.use('/youtube', scraping.scrapingYoutube);
+app.use('/videos/:page', VideoController.index);
 
 module.exports = app;
