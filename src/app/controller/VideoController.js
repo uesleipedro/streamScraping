@@ -2,16 +2,19 @@ const { response } = require("express");
 const { v4: uuid } = require("uuid");
 
 const Video = require("../models/Videos");
+const Counters = require("../models/Counters");
+const getNextSequenceValue = require("../services/getNextSequenceValue");
+const escapeRegExp = require("../services/scapeString");
 
 module.exports = {
     async index(request, response) {
 
         let page = Number(request.params.page) === 1
             ? 0
-            : (Number(request.params.page) -1) * 10;
+            : (Number(request.params.page) - 1) * 10;
 
         try {
-            const videos = await Video.find().sort('-order').skip(Number(page)).limit(10);
+            const videos = await Video.find().sort("-counter").skip(Number(page)).limit(10);
             return response.status(200).json({ videos });
         } catch (err) {
             response.status(500).json({ error: err.message });
@@ -41,7 +44,7 @@ module.exports = {
     },
 
     async autoStore(data) {
-        const { title, link } = data;
+        const { title, link, index } = data;
 
         Video.findOne({ link: link }, async function (err, ret) {
 
@@ -51,17 +54,14 @@ module.exports = {
                     return response.status(400).json({ error: "Missing title or link" });
                 }
 
-                let order = await Video.findOne()
-                    .sort('-order')
-                    .exec();
-                order = order.order + 1;
-                console.log(order);
+                let seq = await getNextSequenceValue('videos');
 
                 const video = new Video({
                     _id: uuid(),
-                    title,
-                    link,
-                    order
+                    // counter: seq.sequence,
+                    counter: index,
+                    title: escapeRegExp(title),
+                    link: escapeRegExp(link),
                 });
 
                 try {
@@ -69,6 +69,7 @@ module.exports = {
                 } catch (err) {
                     response.status(400).json({ error: err.message });
                 }
+
             } else {
                 //
             }

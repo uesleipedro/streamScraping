@@ -6,8 +6,7 @@ const scraping = require('./app/controller/scraping');
 const VideoController = require("./app/controller/VideoController");
 
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*') 

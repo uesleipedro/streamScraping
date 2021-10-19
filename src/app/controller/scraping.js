@@ -96,7 +96,8 @@ module.exports = {
         });
         const page = await browser.newPage();
         await page.goto(
-            `https://www.youtube.com/channel/UC_Fk7hHbl7vv_7K8tYqJd5A/videos`
+            // `https://www.youtube.com/channel/UC_Fk7hHbl7vv_7K8tYqJd5A/videos`
+            `https://www.youtube.com/c/SpaceTodayTV/videos`
         );
         await page.waitForSelector("div#contents");
         await page.waitForTimeout(0);
@@ -113,9 +114,9 @@ module.exports = {
         await browser.close();
 
         titles.reverse();
-        titles.map(video => {
+        titles.map(async (video) => {
             let obj = { title: video.title, link: video.link };
-            VideoController.autoStore(obj);
+            await VideoController.autoStore(obj);
         });
 
         return res.status(200).send(titles);
