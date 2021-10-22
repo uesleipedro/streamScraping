@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 
 const scraping = require('./app/controller/scraping');
 const VideoController = require("./app/controller/VideoController");
+const ConfiguracoesController = require('./app/controller/ConfiguracoesController');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -27,5 +28,6 @@ app.use('/externalArticles/:page', scraping.newsnow);
 app.use('/post/:page', scraping.post);
 app.use('/youtube', scraping.scrapingYoutube);
 app.use('/videos/:page', VideoController.index);
+app.use('/configuracoes/:value', ConfiguracoesController.index);
 
 module.exports = app;

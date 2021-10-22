@@ -44,7 +44,7 @@ module.exports = {
     },
 
     async autoStore(data) {
-        const { title, link, index } = data;
+        const { title, link } = data;
 
         Video.findOne({ link: link }, async function (err, ret) {
 
@@ -58,8 +58,7 @@ module.exports = {
 
                 const video = new Video({
                     _id: uuid(),
-                    // counter: seq.sequence,
-                    counter: index,
+                    counter: seq.sequence,
                     title: escapeRegExp(title),
                     link: escapeRegExp(link),
                 });
