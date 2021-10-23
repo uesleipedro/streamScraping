@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 function connectToDatabase() {
     mongoose.connect(
-        process.env.DATABASE_URL,
-        //'mongodb://localhost:27017/spacetoday',
+         process.env.DATABASE_URL,
+        // 'mongodb://localhost:27017/spacetoday',
         {
             useNewUrlParser: true,
             useUnifiedTopology: true,

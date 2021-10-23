@@ -96,7 +96,6 @@ module.exports = {
         });
         const page = await browser.newPage();
         await page.goto(
-            // `https://www.youtube.com/channel/UC_Fk7hHbl7vv_7K8tYqJd5A/videos`
             `https://www.youtube.com/c/SpaceTodayTV/videos`
         );
         await page.waitForSelector("div#contents");
@@ -120,6 +119,42 @@ module.exports = {
         });
 
         return res.status(200).send(titles);
+    },
+
+    async apiYoutubeFetch(req, res) {
+
+        async function run() {
+
+            let p = "";
+            let array = [];
+
+            await axios.get(`https://www.googleapis.com/youtube/v3/search?pageToken=${p}&order=date&part=snippet&channelId=UC_Fk7hHbl7vv_7K8tYqJd5A&maxResults=50&key=AIzaSyCZEJPtAiZzwLgm3nHdKVl28sibHrKaiZg`)
+                .then((response) => {
+                    let a = response.data.items;
+                    p = response.data.nextPageToken;
+
+                    a.map(a => {
+                        array.push({
+                            title: a.snippet.title,
+                            link: a.id.videoId,
+                            publishTime: a.snippet.publishTime
+                        });
+                    });
+
+                });
+
+            array.reverse();
+            array.map(async video => {
+                let obj = { title: video.title, link: video.link, publishTime: video.publishTime };
+                await VideoController.autoStore(obj);
+
+            });
+
+            return res.status(200).send(array);
+        }
+
+        run();
+
     }
 
 }

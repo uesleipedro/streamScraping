@@ -7,7 +7,8 @@ const videoSchema = new mongoose.Schema({
     },
     counter: {
         type: Number,
-       // required: true,
+        // required: true,
+        unique: true,
     },
     title: {
         type: String,
@@ -19,11 +20,14 @@ const videoSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    publishTime: {
+        type: Date
+    }
 
 },
-    {
-        timestamps: { createdAt: true, updatedAt: false },
-    }
+    // {
+    //     timestamps: { createdAt: true, updatedAt: false },
+    // }
 );
 
 module.exports = mongoose.model("Video", videoSchema, 'videos');

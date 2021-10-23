@@ -1,8 +1,10 @@
 require('dotenv').config();
 const http = require('http');
+const Scheduled = require('scheduled');
 
 const app = require('./app.js');
 const connectToDatabase = require("./database");
+const scrap = require('./app/controller/scraping');
 
 connectToDatabase();
 
@@ -14,7 +16,7 @@ server.listen(port);
 //     id: "minuteTaskEven",
 //     pattern: "*/1", 
 //     task: function(){
-//         VideoController.scrapingYoutube;
+//         scrap.apiYoutubeFetch;
 //     }
 // }).start();
 
