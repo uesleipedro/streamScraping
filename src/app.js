@@ -31,5 +31,4 @@ app.use('/videos/:page', VideoController.index);
 app.use('/configuracoes/:value', ConfiguracoesController.index);
 app.use('/fetchYoutube', scraping.apiYoutubeFetch);
 
-
 module.exports = app;
