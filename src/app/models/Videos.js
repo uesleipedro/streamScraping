@@ -25,9 +25,6 @@ const videoSchema = new mongoose.Schema({
     }
 
 },
-    // {
-    //     timestamps: { createdAt: true, updatedAt: false },
-    // }
 );
 
 module.exports = mongoose.model("Video", videoSchema, 'videos');

@@ -5,12 +5,13 @@ const bodyParser = require('body-parser');
 const scraping = require('./app/controller/scraping');
 const VideoController = require("./app/controller/VideoController");
 const ConfiguracoesController = require('./app/controller/ConfiguracoesController');
+const LaunchController = require('./app/controller/LaunchController');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*') 
+    res.header('Access-Control-Allow-Origin', '*')
     res.header(
         'Access-Control-Allow-Header',
         'Origin, X-Requested-With, Content-Type, Accept, Authorization'
@@ -30,5 +31,8 @@ app.use('/youtube', scraping.scrapingYoutube);
 app.use('/videos/:page', VideoController.index);
 app.use('/configuracoes/:value', ConfiguracoesController.index);
 app.use('/fetchYoutube', scraping.apiYoutubeFetch);
+
+app.use('/fetchLaunchs', LaunchController.store);
+app.use('/getLaunchs/:page', LaunchController.index);
 
 module.exports = app;
