@@ -34,5 +34,10 @@ app.use('/fetchYoutube', scraping.apiYoutubeFetch);
 
 app.use('/fetchLaunchs', LaunchController.store);
 app.use('/getLaunchs/:page', LaunchController.index);
+app.use('/ip', function () {
+    const ipCliente = req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress;
+    return response.status(200).send({ ipCliente });
+});
+
 
 module.exports = app;

@@ -6,7 +6,7 @@ const Counters = require("../models/Counters");
 const getNextSequenceValue = require("../services/getNextSequenceValue");
 const escapeRegExp = require("../services/scapeString");
 
-module.exports = { 
+module.exports = {
     async index(request, response) {
 
         let page = Number(request.params.page) === 1
@@ -14,7 +14,7 @@ module.exports = {
             : (Number(request.params.page) - 1) * 10;
 
         try {
-            const videos = await Video.find().sort({counter: -1, publishTime: -1}).skip(Number(page)).limit(10);
+            const videos = await Video.find().sort({ counter: -1, publishTime: -1 }).skip(Number(page)).limit(10);
             return response.status(200).json({ videos });
         } catch (err) {
             response.status(500).json({ error: err.message });
