@@ -37,7 +37,7 @@ module.exports = {
                         name: result.name,
                         date: result.net,
                         image: result.image,
-                        company: result.launch_service_provider.name,
+                        company: ((result || {}).launch_service_provider || {}).name,
                         pad: result.pad.name,
                         rocketName: result.rocket.configuration.name,
                         missionName: ((result || {}).mission || {}).name,
